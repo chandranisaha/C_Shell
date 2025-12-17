@@ -26,11 +26,13 @@ Installation guide: https://gcc.gnu.org/install/index.html
 
 ## Compilation and Execution
 **Repository Setup**
-git clone https://github.com/chandranisaha/C_Shell.git
-cd C_Shell
+
+    git clone https://github.com/chandranisaha/C_Shell.git
+    cd C_Shell
 
 **Build**
-make
+
+    make
 
 
 Note: Some functionalities may behave differently when invoked strictly through the Makefile.
