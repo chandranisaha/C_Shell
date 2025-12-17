@@ -1,191 +1,166 @@
+# Shell Implementation in C
 
+## Chandrani Saha
 
-# Shell Implementation in C!
+This repository contains a custom Unix-style shell implemented in C, designed to replicate core behaviors of standard command-line shells. The project focuses on low-level systems programming concepts such as process creation, signal handling, command parsing, and I/O redirection.
 
-This project is a basic implementation of a shell in the C programming language. The shell provides a command-line interface for users to interact with the operating system.
+## Overview
+
+This shell provides an interactive command-line interface that supports execution of both built-in and external commands. It was developed to gain hands-on experience with operating system internals and Unix process management.
+
+Key learning areas include:
+
+- Process control (fork, exec, wait)
+
+- Signal handling
+
+- File descriptors and I/O redirection
+
+- Command parsing and job control
 
 ## Getting Started
+**Prerequisites**
 
-### Prerequisites
+A C compiler (such as GCC)
+Installation guide: https://gcc.gnu.org/install/index.html
 
-- Ensure you have [C compiler](https://gcc.gnu.org/install/index.html) installed.
+## Compilation and Execution
+**Repository Setup**
+git clone https://github.com/chandranisaha/C_Shell.git
+cd C_Shell
 
-### Building
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/your-username/c-shell.git
-   cd c-shell
-   ```
-
-2. Starting the shell:  
-   - Run the command present in the makefile directly in the terminal - some functionalities hamper while running makefile
-   - For general purpose run the makefle
-```bash 
-    make 
-```
-
-## Using The Shell
+**Build**
+make
 
 
-### 1. Prompt Display
-The shell displays a custom prompt indicating the current user, system name, and working directory. The home directory is represented as "~," and paths are displayed relative to it.  
-Maximum input length has been taken as 100000.
+Note: Some functionalities may behave differently when invoked strictly through the Makefile.
+For complete functionality, it is recommended to run the compilation command specified inside the Makefile directly in the terminal.
 
-### 2. Command Separation
-Commands can be entered using either ; or & as separators to execute multiple commands in sequence or concurrently.
+After compilation, run the generated executable to start the shell.
 
-### 3. hop Command
-The hop command changes the current working directory. It supports flags such as ".", "..", "~", and "-" for navigation. Multiple hop commands can be executed sequentially when provided with multiple arguments.
+## Shell Functionality
 
-```bash
-hop test
-hop assignment
-hop ~
-hop -
-hop .. tutorial
-hop ~/project
-```
+Once launched, the shell displays an interactive prompt and waits for user input. It supports execution of standard Unix commands as well as custom built-in commands implemented as part of the project.
 
+The shell supports:
 
-### 4. reveal Command
-The reveal command lists files and directories in a specified directory. It supports flags -a and -l for displaying hidden files and additional information. Differentiates file types with color coding (green for executables, white for files, and blue for directories).
-Color is given only to the file/directory name
-```bash
- 
-reveal test
-reveal -a -l directory
-```
+- Foreground and background process execution
 
-### 5. log Command
-The log command stores and retrieves the 15 most recent unique command statements. It supports the execute option to run a command from the past by index and provides a purge option to clear all stored past events.
-It also stores erroneous commands.
-The history.txt file for storing the information is created on my home directory.
-```bash
- 
-log
-log execute 3
-log purge
-```
+- Command parsing
 
-### 6. System Commands
-The shell executes system commands both in the foreground and background. It captures and displays the process ID (PID) of background processes.
+- Signal handling for user interrupts
 
-```bash
- 
-ls
-sleep 5 &
-echo "Hello"
-```
-### 7. proclore Command
-The proclore command displays information about a specified process, including PID, process status, process group, virtual memory, and executable path.
-The units for virutal space are in bytes.
-```bash
- 
-proclore
-proclore 123
-```
+- Input/output redirection and piping
 
-### 8. seek Command
-The seek command searches for files or directories in the specified target directory. It supports flags -d, -f, and -e for filtering results.
+## Built-in Commands and Features
+**hop**
 
-```bash
- 
-seek filename
-seek -d directory
-seek -f filename directory
-seek -e -f filename directory
-```
-### 9. .myshrc Command
-This functionality enables the user to alias commands that are mentioned in the `.myshrc` file. 
-For aliased commands the log file stores the "alias name".
+Changes the current working directory. Supports:
 
+- .
 
-### 10. I/O Redirection
-The shell supports I/O redirection using >, >>, and <. It creates or appends to output files and handles input files appropriately.
-ASSUMTION: input output redirection is used only at end of commands, and "&" is taken to be for the particular part of pipe in which it is mentioned.
-```bash
- 
-echo "Hello" > output.txt
-cat < input.txt
-command >> log.txt
-```
+- ..
 
-### 11. Pipes
-The shell implements pipes (|) for passing information between commands. It supports any number of pipes for both user-defined and system commands.
+- ~ (home directory)
 
-```bash
-command1 | command2
-command1 | command2 | command3
-```
+- - (previous directory)
 
-### 12. Redirection with Pipes
-Enables I/O redirection along with pipes for user-defined and system commands.
+**reveal**
 
-```bash
+Lists directory contents with support for:
 
- 
-command1 < input.txt | command2 > output.txt
-```
-### 13. activities Command
-The activities command displays a list of currently running processes spawned by the shell. It shows PID, command name, and state (running or stopped).
+- -a (show hidden files)
 
-```bash
+- -l (detailed listing)
 
- 
-activities
-```
-### 14. Signals
-The ping command sends signals to processes based on PID and signal number. It displays success messages or an error if the process is not found.
+Output is color-coded for better readability.
 
-```bash 
- 
-ping 123 9
-ping 456 15
-```
+**log**
 
+Maintains a history of recently executed commands. Supports:
 
-Following 3 commands are direct keyboard input where Ctrl is Control key on keyboard (or it’s equivalent).
+-Viewing command history
 
-#### Ctrl - C
+- Executing commands from history
 
-- Interrupt any currently running foreground process by sending it the SIGINT signal. It has no effect if no foreground process is currently running.
+- Clearing stored history
 
-#### Ctrl - D
+**proclore**
 
-- Log out of your shell (after killing all processes) while having no effect on the actual terminal.
+Displays information about a given process, including:
 
-#### Ctrl - Z
+- Process ID
 
-- Push the (if any) running foreground process to the background and change it’s state from “Running” to “Stopped”. It has no effect on the shell if no foreground process is running.
+- Status
 
+- Memory usage
 
+- Executable path
 
-### 15. fg and bg Commands
-The fg command brings a background process to the foreground, and the bg command changes the state of a stopped background process to running.
+**seek**
 
-```bash
+Searches for files or directories with optional filters:
 
- 
-fg 123
-bg 456
-```
-### 16. Neonate Command
-The Neonate command prints the PID of the most recently created process at intervals until the 'x' key is pressed.
+- -d (directories only)
 
-```bash
- 
-neonate -n 4
-```
+- -f (files only)
 
-### 17. iMan Command
-The iMan command fetches and displays man pages from http://man.he.net/. It accepts a command name as an argument and retrieves the corresponding man page.
+- -e (exact match)
 
-```bash
- 
-iMan ls
-iMan grep
-```
+**activities**
 
+Lists currently running background processes started by the shell.
 
+**iMan**
+
+Fetches and displays manual pages from an online source.
+
+## Job Control and Signals
+
+The shell supports basic job control and signal handling:
+
+- Ctrl + C: Interrupts the currently running foreground process
+
+- Ctrl + Z: Stops the foreground process and moves it to the background
+
+- Ctrl + D: Exits the shell after cleanup
+
+## Commands:
+
+fg <pid>: Bring a background process to the foreground
+
+bg <pid>: Resume a stopped process in the background
+
+## Design Philosophy
+
+- Minimal and modular C code
+
+- Explicit use of system calls
+
+- Focus on correctness and clarity
+
+- Designed for learning and extensibility rather than production use
+
+## Limitations
+
+- No advanced shell scripting support
+
+- Limited job control compared to full-featured shells like Bash
+
+- No tab completion or configurable prompts
+
+- Basic error handling
+
+## Future Improvements
+
+Possible extensions include:
+
+- Persistent history across sessions
+
+- Tab completion
+
+- Environment variable support
+
+- Improved error handling and diagnostics
+
+---
